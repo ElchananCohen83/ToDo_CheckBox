@@ -21,40 +21,39 @@
         const add = document.getElementById('add');
         let counter = 0;
         let divCheckBox = document.getElementById('divCheckBox');
-        const addedLabels = new Set(); // To keep track of added labels
+        const addedLabels = new Array(); // To keep track of added labels
 
-        // Add an event listener to the document that listens for changes on checkboxes.
-        document.addEventListener('change', function (event) {
-            if (event.target.type === 'checkbox') {
-                const checkboxId = event.target.id;
-                const label = document.querySelector(`label[for="${checkboxId}"]`);
-                if (event.target.checked) {
-                    label.classList.add('line-through');
-                } else {
-                    label.classList.remove('line-through');
-                }
+        divCheckBox.addEventListener('change', function (event){
+            const checkboxId = event.target.id;
+            const label = document.querySelector(`label[for="${checkboxId}"]`);
+            if(event.target.checked){
+                label.classList.add('line-through');
+            }else{
+                label.classList.remove('line-through');
             }
-        });
+        })
 
         function addCheckBox() {
             const input = document.getElementById('input').value;
             
             // Check if the label is already added before adding a new checkbox
-            if (addedLabels.has(input)) {
-                alert('Label already exists! Please use a different label.');
+            if (addedLabels.includes(input)) {
+                alert(`The label "${input}" already exists! Please use a different label.`);
+                document.getElementById('input').value = ''
                 return;
             }
             
             const checkboxId = `checkbox_${counter}`;
-            const checkBox = `
-                <input type="checkbox" id="${checkboxId}" name="checkBox" value="${counter}">
+            const checkBox = `<input type="checkbox" id="${checkboxId}" name="checkBox" value="${counter}">
                 <label for="${checkboxId}">${input}</label><br>`;
             
             divCheckBox.innerHTML += checkBox;
             counter++;
 
             // Add the label to the set of added labels
-            addedLabels.add(input);
+            addedLabels.push(input);
+
+            document.getElementById('input').value = ''
         }
 
         add.addEventListener("click", addCheckBox);
