@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+    <style>
+        /* Define the CSS style for the line-through effect */
+        .line-through {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>ToDo</h1>
+    <input id="input" type="text">
+    <button id="add">Add</button>
+    <div id="divCheckBox"></div>
+
+    <script>
+        const add = document.getElementById('add');
+        let counter = 0;
+        let divCheckBox = document.getElementById('divCheckBox');
+        const addedLabels = new Set(); // To keep track of added labels
+
+        // Add an event listener to the document that listens for changes on checkboxes.
+        document.addEventListener('change', function (event) {
+            if (event.target.type === 'checkbox') {
+                const checkboxId = event.target.id;
+                const label = document.querySelector(`label[for="${checkboxId}"]`);
+                if (event.target.checked) {
+                    label.classList.add('line-through');
+                } else {
+                    label.classList.remove('line-through');
+                }
+            }
+        });
+
+        function addCheckBox() {
+            const input = document.getElementById('input').value;
+            
+            // Check if the label is already added before adding a new checkbox
+            if (addedLabels.has(input)) {
+                alert('Label already exists! Please use a different label.');
+                return;
+            }
+            
+            const checkboxId = `checkbox_${counter}`;
+            const checkBox = `
+                <input type="checkbox" id="${checkboxId}" name="checkBox" value="${counter}">
+                <label for="${checkboxId}">${input}</label><br>`;
+            
+            divCheckBox.innerHTML += checkBox;
+            counter++;
+
+            // Add the label to the set of added labels
+            addedLabels.add(input);
+        }
+
+        add.addEventListener("click", addCheckBox);
+    </script>
+</body>
+</html>
